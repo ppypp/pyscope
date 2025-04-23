@@ -29,7 +29,15 @@ logger = logging.getLogger(__name__)
 
 
 """
-Codes:
+Schedule Telrun Script
+This script schedules observations for a telescope based on a catalog of
+.sch files. 
+It uses a scheduling function to create a schedule and then writes the schedule as a .ecsv file.
+The script also includes options for plotting the schedule.
+
+
+
+Scheduling Codes:
 
 U = unscheduled
 X = expired
