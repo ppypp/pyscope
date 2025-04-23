@@ -171,8 +171,8 @@ def scheduler_cli(
         )
         # Default Blocks
         deneb = astroplan.FixedTarget.from_name('Deneb')
-        m13 = astroplan.FixedTarget.from_name('M13')
         blocks = [astroplan.ObservingBlock(deneb, 20*u.minute, 0)]
+        m13 = astroplan.FixedTarget.from_name('M13')
         blocks.append(astroplan.ObservingBlock(m13, 20*u.minute, 0))
     # Call the schedule with the observing blocks and schedule to schedule the blocks
     scheduler(blocks, schedule)
@@ -316,10 +316,18 @@ def _parse_json(catalog_path):
 
     Returns
     -------
-    blocks : list
+    blocks : list [astroplan.ObservingBlock]
         List of blocks created from the JSON file.
 
+    Example
+    -------
+        deneb = astroplan.FixedTarget.from_name('Deneb')
+        blocks = [astroplan.ObservingBlock(deneb, 20*u.minute, 0)]
+        m13 = astroplan.FixedTarget.from_name('M13')
+        blocks.append(astroplan.ObservingBlock(m13, 20*u.minute, 0))
+
     """
+
     logger = logging.getLogger(__name__)
     logger.info("Parsing JSON file")
     with open(catalog_path, "r") as f:
@@ -342,10 +350,18 @@ def _parse_sch(catalog_path):
 
     Returns
     -------
-    blocks : list
+    blocks : list [astroplan.ObservingBlock]
         List of blocks created from the .sch file.
 
+    Example
+    -------
+        deneb = astroplan.FixedTarget.from_name('Deneb')
+        blocks = [astroplan.ObservingBlock(deneb, 20*u.minute, 0)]
+        m13 = astroplan.FixedTarget.from_name('M13')
+        blocks.append(astroplan.ObservingBlock(m13, 20*u.minute, 0))
+
     """
+    
     logger = logging.getLogger(__name__)
     logger.info("Parsing .sch file")
     with open(catalog_path, "r") as f:
