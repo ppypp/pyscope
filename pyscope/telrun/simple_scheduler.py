@@ -55,7 +55,7 @@ class SimpleScheduler(Scheduler):
                 # when a block is inserted, the number of slots increases
                 else:
                     # a test transition between the last scheduled block and this one
-                    transition = self.transitioner(schedule.observing_blocks[-1],
+                    transition = self.transitioner(self.schedule.observing_blocks[-1],
                                                    block, current_time, self.observer)
                     test_time = current_time + transition.duration
                 # how many time intervals are we from the start
@@ -76,4 +76,4 @@ class SimpleScheduler(Scheduler):
             # if every block failed, progress the time
             if i == len(blocks):
                 current_time += self.gap_time
-        return schedule
+        return self.schedule

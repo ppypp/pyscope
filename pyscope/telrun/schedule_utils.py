@@ -55,6 +55,7 @@ def plot_schedule_gantt_cli(schedule_table, observatory):
         TBD
             
     """
+    logger = logging.getLogger(__name__)
     if type(schedule_table) is not table.Table:
         schedule_table = table.Table.read(schedule_table, format="ascii.ecsv")
 
@@ -263,6 +264,7 @@ def plot_schedule_sky_cli(schedule_table, observatory):
         TBD
         
     """
+    logger = logging.getLogger(__name__)
     if type(schedule_table) is not table.Table:
         schedule_table = table.Table.read(schedule_table, format="ascii.ecsv")
 

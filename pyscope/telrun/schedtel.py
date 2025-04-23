@@ -1044,7 +1044,7 @@ def schedtel_cli(
     if queue is not None:
         if write_queue:
             logger.info("Writing queue to file")
-            queue_table.write(queue, overwrite=True, format="ascii.ecsv")
+            #queue_table.write(queue, overwrite=True, format="ascii.ecsv")
         else:
             logger.info("Not writing queue to file")
     else:
