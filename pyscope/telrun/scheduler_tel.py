@@ -39,6 +39,8 @@ This module contains the Scheduler Script
 )
 @click.version_option
 def scheduler_cli(    
+    catalog_path=None,
+    block_read_method=None, 
     date=None,
     observatory=None,
     max_altitude=-12,
@@ -63,6 +65,13 @@ def scheduler_cli(
 
     Parameters
     ----------
+    catalog_path : str
+        Path to a '.sch' file or '.cat' file containing observation blocks. 
+        TODO: Support for JSON files is not implemented yet.
+        If not provided, defaults to 'schedule.cat' in '$TELHOME/schedules/'.
+    block_read_method : str
+        Method to read the blocks. Default is None for debugging
+        # TODO: Can get this information from catalog_path extension - Remove this option
     date : str
         Date to schedule for. If not provided, the current date is used.
     observatory : ???
@@ -148,12 +157,23 @@ def scheduler_cli(
     )
     schedule = astroplan.Schedule(start_time, end_time)
     # Create blocks [Hardcoded for testing]
-    # TODO - Create Blocks from JSON file
-    # TODO - Create Blocks from .sch file
-    deneb = astroplan.FixedTarget.from_name('Deneb')
-    m13 = astroplan.FixedTarget.from_name('M13')
-    blocks = [astroplan.ObservingBlock(deneb, 20*u.minute, 0)]
-    blocks.append(astroplan.ObservingBlock(m13, 20*u.minute, 0))
+    # TODO - Choose import method [JSON file, .sch file]
+    blocks = []
+    if block_read_method == "json":
+        # TODO - Create Blocks from JSON file
+        blocks.append(_parse_json(catalog_path))
+    elif block_read_method == "sch":
+        # TODO - Create Blocks from .sch file
+        blocks.append(_parse_sch(catalog_path))
+    else:
+        logging.error(
+            "Block read method must be 'json' or 'sch'. Entering debug mode"
+        )
+        # Default Blocks
+        deneb = astroplan.FixedTarget.from_name('Deneb')
+        m13 = astroplan.FixedTarget.from_name('M13')
+        blocks = [astroplan.ObservingBlock(deneb, 20*u.minute, 0)]
+        blocks.append(astroplan.ObservingBlock(m13, 20*u.minute, 0))
     # Call the schedule with the observing blocks and schedule to schedule the blocks
     scheduler(blocks, schedule)
     # Create the schedule table
@@ -282,3 +302,57 @@ def _get_schedule_times(observer,date=None,schedule_length=1):
     end_time = start_time + schedule_length + u.day
     logger.info("Schedule time range: %s to %s (UTC)" % (start_time.iso, end_time.iso))
     return start_time, end_time
+
+
+def _parse_json(catalog_path):
+    """
+    Parse the JSON file and create the blocks. 
+    TODO: Not implemented yet
+
+    Parameters
+    ----------
+    catalog_path : str
+        Path to the JSON file.
+
+    Returns
+    -------
+    blocks : list
+        List of blocks created from the JSON file.
+
+    """
+    logger = logging.getLogger(__name__)
+    logger.info("Parsing JSON file")
+    with open(catalog_path, "r") as f:
+        data = json.load(f)
+        blocks = []
+        for block in data["blocks"]:
+            block["target"] = astroplan.FixedTarget.from_name(block["target"])
+            blocks.append(block)
+    return blocks
+
+def _parse_sch(catalog_path):
+    """
+    Parse the .sch file and create the blocks. 
+    TODO: Not implemented yet
+
+    Parameters
+    ----------
+    catalog_path : str
+        Path to the .sch file.
+
+    Returns
+    -------
+    blocks : list
+        List of blocks created from the .sch file.
+
+    """
+    logger = logging.getLogger(__name__)
+    logger.info("Parsing .sch file")
+    with open(catalog_path, "r") as f:
+        data = f.read()
+        blocks = []
+        for block in data.split("\n"):
+            block = block.split(",")
+            block[0] = astroplan.FixedTarget.from_name(block[0])
+            blocks.append(block)
+    return blocks
