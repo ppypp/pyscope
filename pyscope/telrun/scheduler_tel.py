@@ -160,9 +160,9 @@ def scheduler_cli(
     logger.info("Creating schedule table")
     schedule_table = schedule.to_table()
     # Construct the path for the schedule file and output
-    logger.info("Writing schedule to file")
+    logger.debug("Creating schedule path")
     if filename is None or telrun:
-        first_time = scheduled_blocks[0]["start_time"].strftime("%Y-%m-%dT%H-%M-%S")
+        first_time = schedule[0]["start_time"].strftime("%Y-%m-%dT%H-%M-%S")
         filename = "telrun_" + first_time + ".ecsv"
     if not telrun:
         write_fname = filename
@@ -178,6 +178,8 @@ def scheduler_cli(
             os.makedirs(path)
         logger.info("Creating directory %s" % path)
         write_fname = path + filename
+    # Write the schedule to a file
+    logger.debug("Writing schedule to file")
     schedule_table.write(write_fname, overwrite=True, format="ascii.ecsv")
 
 def _load_observatory_config(observatory=None):
@@ -195,8 +197,8 @@ def _load_observatory_config(observatory=None):
 
     Returns
     -------
-    Observatory
-        The astroplan observer object.
+    observatory : astroplan.Observer
+        The astroplan observer object. 
 
     """
 
@@ -254,9 +256,9 @@ def _get_schedule_times(observer,date=None,schedule_length=1):
 
     Returns
     -------
-    t0 : astropy.time.Time
+    start_time : astropy.time.Time
         Start time of the schedule.
-    t1 : astropy.time.Time
+    end_time : astropy.time.Time
         End time of the schedule.
 
     """
@@ -273,7 +275,6 @@ def _get_schedule_times(observer,date=None,schedule_length=1):
     else:
         date = datetime.datetime.strptime(date, "%Y-%m-%d")
     date = datetime.datetime(date.year, date.month, date.day, 12, 0, 0, tzinfo=tz)
-
     start_time = astrotime.Time(
         datetime.datetime(date.year, date.month, date.day, 12, 0, 0, tzinfo=tz),
         format="datetime",
