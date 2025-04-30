@@ -8,11 +8,26 @@ import numpy as np
 class SimpleScheduler(Scheduler):
     """
     schedule blocks randomly
+    Astroplan Plan example scheduler
+
+
     """
     def __init__(self, *args, **kwargs):
+        """
+        """
         super(SimpleScheduler, self).__init__(*args, **kwargs)
 
     def _make_schedule(self, blocks):
+        """
+        This method is called by the Scheduler to create a schedule
+        from the list of blocks. It is called by the Scheduler
+        when the schedule is created.
+        
+        Parameters
+        ----------
+        blocks : list astroplan.ObervationBlock
+            list of blocks to be scheduled
+        """
         # gather all the constraints on each block into a single attribute
         for b in blocks:
             if b.constraints is None:
