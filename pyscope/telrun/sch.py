@@ -14,7 +14,10 @@ from pyscope import __version__
 
 logger = logging.getLogger(__name__)
 
+"""
+This file contains the read function for parsing the .sch files
 
+"""
 def read(
     filename,
     location=None,

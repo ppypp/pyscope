@@ -29,6 +29,8 @@ __all__ = [
     "schedtab",
     "reports",
     "schedtel",
+    "schedule_utils",
+    "scheduler_tel",
     "plot_schedule_gantt",
     "plot_schedule_sky",
     "start_telrun_operator",
