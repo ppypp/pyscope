@@ -21,8 +21,8 @@ from astropy import units as u
 from astroquery import mpc
 from cmcrameri import cm as ccm
 from matplotlib import ticker
-from pyscope.telrun.schedule_utils import format_exptime, plot_schedule_gantt, plot_schedule_sky
 
+from pyscope.telrun.schedule_utils import format_exptime, plot_schedule_gantt, plot_schedule_sky
 from .. import utils
 from ..observatory import Observatory, reconfig
 from . import sch, schedtab
